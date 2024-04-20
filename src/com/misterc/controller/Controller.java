@@ -1,5 +1,7 @@
 package com.misterc.controller;
 
+import com.misterc.input.Mister;
+
 public abstract class Controller {
 
     protected final MisterC currentProgram;
@@ -10,7 +12,7 @@ public abstract class Controller {
         this.previousController = previousController;
     }
 
-    public abstract void handle();
+    public abstract void handle(String input);
 
     public abstract void paint();
 

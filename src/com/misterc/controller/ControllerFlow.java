@@ -26,18 +26,11 @@ public abstract class ControllerFlow extends Controller {
         state++;
     }
 
+    /**
+     * Increases the current state of this controller
+     */
     protected final void previousState() {
         state--;
-    }
-
-    @Override
-    public void handle() {
-        return;
-    }
-
-    @Override
-    public void paint() {
-        return;
     }
 
 }

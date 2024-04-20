@@ -1,5 +1,7 @@
 package com.misterc.controller;
 
+import com.misterc.input.InputHandler;
+
 public abstract class MisterC {
 
     /**
@@ -22,9 +24,13 @@ public abstract class MisterC {
      */
     public final void loop() {
         while(true) {
+            String input = InputHandler.readString();
             controller.paint();
-            controller.handle();
+            controller.handle(input);
         }
     }
+
+    public abstract <T extends MisterC> T getProgram();
+
 
 }
