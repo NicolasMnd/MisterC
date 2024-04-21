@@ -1,7 +1,5 @@
 package com.misterc.controller;
 
-import com.misterc.input.Mister;
-
 public abstract class Controller {
 
     protected final MisterC currentProgram;

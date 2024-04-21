@@ -24,13 +24,10 @@ public abstract class MisterC {
      */
     public final void loop() {
         while(true) {
-            String input = InputHandler.readString();
             controller.paint();
+            String input = InputHandler.readString();
             controller.handle(input);
         }
     }
-
-    public abstract <T extends MisterC> T getProgram();
-
 
 }
