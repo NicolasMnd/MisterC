@@ -5,32 +5,35 @@ public abstract class ControllerFlow extends Controller {
     /**
      * The state of the controller
      */
-    private int state = 0;
+    private State state;
 
     public ControllerFlow(MisterC c, Controller previous) {
         super(c, previous);
+        this.state = initStates()[0];
+    }
+
+    public abstract State[] initStates();
+
+    /**
+     * Returns the current state of the program
+     * @return state of the program
+     */
+    protected State getState() {
+        return this.state.clone();
     }
 
     /**
-     * Gets the current state
-     * @return the state of the controller;
+     * Puts the controller in the next state
      */
-    protected int getState() {
-        return this.state;
+    protected void nextState(String type) {
+        this.state = this.state.nextState(type);
     }
 
     /**
-     * Increases the state of this controller
+     * Puts the controller in a previous state
      */
-    protected final void nextState() {
-        state++;
-    }
-
-    /**
-     * Increases the current state of this controller
-     */
-    protected final void previousState() {
-        state--;
+    protected void previousState() {
+        this.state = this.state.previousState();
     }
 
 }

@@ -8,6 +8,7 @@ public abstract class MisterC {
      * The controller used to control the program flow.
      */
     protected Controller controller;
+    private boolean run = true;
 
     public MisterC() {}
 
@@ -20,14 +21,22 @@ public abstract class MisterC {
     }
 
     /**
+     * Stops the current program
+     */
+    public final void stop() {
+        this.run = false;
+    }
+
+    /**
      * Initiates the program loop
      */
     public final void loop() {
-        while(true) {
+        while(run) {
             controller.paint();
             String input = InputHandler.readString();
             controller.handle(input);
         }
     }
+    
 
 }
