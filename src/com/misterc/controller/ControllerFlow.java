@@ -36,4 +36,11 @@ public abstract class ControllerFlow extends Controller {
         this.state = this.state.previousState();
     }
 
+    /**
+     * Exits the program by going to the previous controller
+     */
+    protected void exit() {
+        this.currentProgram.setController(previousController);
+    }
+
 }
