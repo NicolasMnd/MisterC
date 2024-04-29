@@ -1,5 +1,9 @@
 package com.misterc.controller;
 
+/**
+ * Controller flow is used to make a sequenced interaction with the user. It takes in {@link State} objects
+ * and can go through them depending on their settings.
+ */
 public abstract class ControllerFlow extends Controller {
 
     /**
@@ -12,6 +16,12 @@ public abstract class ControllerFlow extends Controller {
         this.state = initStates()[0];
     }
 
+    /**
+     * Each ControllerFlow consists of an array of states. This method retrieves the registered states.
+     * Later, this generic class will use these states for executing {@link ControllerFlow#nextState(String)}
+     * and {@link ControllerFlow#previousState()}
+     * @return an array of all states used in this program
+     */
     public abstract State[] initStates();
 
     /**
