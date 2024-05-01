@@ -63,7 +63,7 @@ public class State {
 
     @Override
     public boolean equals(Object obj) {
-        if(this instanceof State state) return state.STATE.equals(STATE);
+        if(obj instanceof State state) return state.STATE.equals(STATE);
         return false;
     }
 
