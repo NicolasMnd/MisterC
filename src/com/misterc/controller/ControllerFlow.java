@@ -28,7 +28,7 @@ public abstract class ControllerFlow extends Controller {
      * Returns the current state of the program
      * @return state of the program
      */
-    protected State getState() {
+    public State getState() {
         return this.state.clone();
     }
 
