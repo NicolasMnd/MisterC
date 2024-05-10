@@ -1,19 +1,25 @@
 package com.misterc.controller;
 
 /**
- * Controller flow is used to make a sequenced interaction with the user. It takes in {@link State} objects
+ * Controller flow is used to make a sequenced interaction with the user. It takes in {@link BaseState} objects
  * and can go through them depending on their settings.
  */
-public abstract class ControllerFlow extends Controller {
+public abstract class ControllerFlow extends Controller implements Cloneable {
 
     /**
      * The state of the controller
      */
-    private State state;
+    private BaseState state;
 
     public ControllerFlow(MisterC c, Controller previous) {
         super(c, previous);
         this.state = initStates()[0];
+    }
+
+    @Override
+    public void handle(String input) {
+        if(input.equals("e")) exit();
+        if(back(input)) return;
     }
 
     /**
@@ -22,14 +28,14 @@ public abstract class ControllerFlow extends Controller {
      * and {@link ControllerFlow#previousState()}
      * @return an array of all states used in this program
      */
-    public abstract State[] initStates();
+    public abstract BaseState[] initStates();
 
     /**
      * Returns the current state of the program
      * @return state of the program
      */
-    public State getState() {
-        return this.state.clone();
+    public BaseState getState() {
+        return this.state;
     }
 
     /**
@@ -51,6 +57,19 @@ public abstract class ControllerFlow extends Controller {
      */
     protected void exit() {
         this.currentProgram.setController(previousController);
+    }
+
+    /**
+     * Goes to the previous state if the input was 'b'
+     * @param input the input of the main loop
+     * @return a boolean determining if the input was indeed 'b'
+     */
+    protected boolean back(String input) {
+        if(input.equalsIgnoreCase("b")) {
+            previousState();
+            return true;
+        }
+        return false;
     }
 
 }

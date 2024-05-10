@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestState {
 
-    State start, scen1, scen2;
+    BaseState start, scen1, scen2;
 
     @BeforeEach
     public void init() {
-        start = new State("start");
-        scen1 = new State("scen1");
-        scen2 = new State("scen2");
+        start = new BaseState("start");
+        scen1 = new BaseState("scen1");
+        scen2 = new BaseState("scen2");
 
         start.addNext(scen1, scen2);
     }
@@ -36,6 +36,23 @@ public class TestState {
     @Test
     public void assertStartNextWrongName() {
         assertNotNull(start.nextState("sceario1"));
+    }
+
+    private static class StateTest extends BaseState {
+        private final String test;
+        StateTest(String test) {
+            super("test");
+            this.test = test;
+        }
+        @Override
+        public ActionResult handle(String input) {
+            if(test.equals("success")) return new ActionResult(Result.SUCCESS);
+            return new ActionResult(Result.SUCCESS);
+        }
+        @Override
+        public void render() {
+
+        }
     }
 
 }
