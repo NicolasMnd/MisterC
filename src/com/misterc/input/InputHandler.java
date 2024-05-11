@@ -69,13 +69,26 @@ public class InputHandler {
     public static Integer getNumberPart(String input) {
         String numberStr = input.replaceAll("[^0-9]", "");
         try {
-            int i = Integer.parseInt(numberStr);
-            return i;
+            return Integer.parseInt(numberStr);
         } catch(NumberFormatException e) {
             // Unlucky
         }
         return null;
     }
 
+    /**
+     * Will strip the given input of string
+     * @param input a string
+     * @return a string value with numbers only
+     */
+    public static Integer getNumberPartSafely(String input, int replacement) {
+        String numberStr = input.replaceAll("[^0-9]", "");
+        try {
+            return Integer.parseInt(numberStr);
+        } catch(NumberFormatException e) {
+            // Unlucky
+        }
+        return replacement;
+    }
 
 }

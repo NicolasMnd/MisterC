@@ -3,6 +3,7 @@ package com.misterc.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Generic state object
@@ -10,76 +11,51 @@ import java.util.List;
 public abstract class BaseState implements State {
 
     /**
-     * The string representation of this state. Used to identify & differentiate between states
+     * The controller object
      */
-    private final String STATE;
+    protected final ControllerFlow controller;
     /**
-     * The list of {@link BaseState} objects that are followed by this one
+     * Name of the state
      */
-    private List<BaseState> next = new ArrayList<>();
+    private final String NAME;
+
     /**
-     * The previous state of this state
+     * Creates a state object
+     * @param controller the controller object
      */
-    private BaseState previous;
-
-    public BaseState(String state) {
-        this.STATE = state;
-    }
-
-    BaseState(String state, List<BaseState> next, BaseState previous) {
-        this.STATE = state;
-        this.next = next;
-        this.previous = previous;
+    public BaseState(ControllerFlow controller, String name) {
+        this.controller = controller;
+        this.NAME = name;
     }
 
     /**
-     * Binds the given state as the next state of this state.
-     * this -> param
-     * @param state the state that should be set as next
+     * Accesses the {@link ControllerFlow} to modify the {@link ControllerFlow#getState()} to the parameter
+     * @param state the next state
      */
-    public final void addNext(BaseState... state) {
-        this.next.addAll(Arrays.stream(state).toList());
+    protected void nextState(BaseState state) {
+        this.controller.state = state;
     }
 
     /**
-     * Puts the given state as a previous state of this state.
-     * So {@link BaseState#previousState()} is the given parameter.
-     * @param state the state that should be the previous state of this
+     * Returns the state that is previous of this one.
      */
-    public final void addPrevious(BaseState state) {
-        this.previous = state;
+    public abstract BaseState back();
+
+    /**
+     * Returns the name of the state
+     */
+    public String getName() {
+        return this.NAME;
     }
 
     /**
-     * Returns the previous assigned state
-     * @return the {@link BaseState} object corresponding to the previous state
+     * Determines if the given object is equal to this object
+     * @param obj the object which is to be compared
+     * @return a boolean determining if the objects are the same
      */
-    BaseState previousState() {
-        return this.previous;
-    }
-
-    /**
-     * Finds the next state based upon the string that is given for that state
-     * @param type the state name
-     * @return the {@link BaseState} corresponding to the given string
-     */
-    BaseState nextState(String type) {
-        for(BaseState i : next)
-            if(i.identifier().equals(type)) return i;
-        return this;
-    }
-
-    /**
-     * Returns the identifier of this state
-     * @return the string version of the state
-     */
-    public String identifier() {
-        return new String(this.STATE);
-    }
-
     @Override
     public boolean equals(Object obj) {
-        if(obj instanceof BaseState state) return state.STATE.equals(STATE);
+        if(obj instanceof BaseState state) return state.getName().equals(this.getName());
         return false;
     }
 

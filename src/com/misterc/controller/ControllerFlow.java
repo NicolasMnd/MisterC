@@ -4,31 +4,33 @@ package com.misterc.controller;
  * Controller flow is used to make a sequenced interaction with the user. It takes in {@link BaseState} objects
  * and can go through them depending on their settings.
  */
-public abstract class ControllerFlow extends Controller implements Cloneable {
+public abstract class ControllerFlow extends Controller {
 
     /**
      * The state of the controller
      */
-    private BaseState state;
+    BaseState state;
+    /**
+     * The latest {@link ActionResult}
+     */
+    ActionResult result = null;
 
     public ControllerFlow(MisterC c, Controller previous) {
         super(c, previous);
-        this.state = initStates()[0];
+        this.state = setStartState();
     }
+
+    /**
+     * Sets the start state of this program.
+     */
+    public abstract BaseState setStartState();
 
     @Override
     public void handle(String input) {
         if(input.equals("e")) exit();
         if(back(input)) return;
+        this.result = this.state.handle(input);
     }
-
-    /**
-     * Each ControllerFlow consists of an array of states. This method retrieves the registered states.
-     * Later, this generic class will use these states for executing {@link ControllerFlow#nextState(String)}
-     * and {@link ControllerFlow#previousState()}
-     * @return an array of all states used in this program
-     */
-    public abstract BaseState[] initStates();
 
     /**
      * Returns the current state of the program
@@ -36,20 +38,6 @@ public abstract class ControllerFlow extends Controller implements Cloneable {
      */
     public BaseState getState() {
         return this.state;
-    }
-
-    /**
-     * Puts the controller in the next state
-     */
-    protected void nextState(String type) {
-        this.state = this.state.nextState(type);
-    }
-
-    /**
-     * Puts the controller in a previous state
-     */
-    protected void previousState() {
-        this.state = this.state.previousState();
     }
 
     /**
@@ -66,10 +54,19 @@ public abstract class ControllerFlow extends Controller implements Cloneable {
      */
     protected boolean back(String input) {
         if(input.equalsIgnoreCase("b")) {
-            previousState();
+            if(state.back() == null) this.currentProgram.setController(previousController);
+            this.state = this.state.back();
             return true;
         }
         return false;
+    }
+
+    /**
+     * Prints the {@link ActionResult#getMessage()}
+     */
+    protected void printMessage() {
+        if(result != null && result.getMessage() != null)
+            System.out.println(result.getMessage());
     }
 
 }

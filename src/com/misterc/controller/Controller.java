@@ -10,6 +10,10 @@ public abstract class Controller {
         this.previousController = previousController;
     }
 
+    public MisterC getCurrentProgram() {
+        return this.currentProgram;
+    }
+
     public abstract void handle(String input);
 
     public abstract void paint();

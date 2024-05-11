@@ -1,58 +1,89 @@
 package com.misterc.controller;
 
+import com.misterc.controller.states.SecondStateTest;
+import com.misterc.controller.states.StartStateTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestState {
 
-    BaseState start, scen1, scen2;
+    static BaseState start, scen1, scen2, scen3;
+    ControllerFlow c, prev;
+    MisterC mister;
 
     @BeforeEach
     public void init() {
-        start = new BaseState("start");
-        scen1 = new BaseState("scen1");
-        scen2 = new BaseState("scen2");
+        mister = new MisterCInstance();
 
-        start.addNext(scen1, scen2);
+        prev = new ControllerFlowInstance(mister, null);
+        c = new ControllerFlowInstance(mister, prev);
+
+        mister.setController(c);
     }
 
     @Test
-    public void assertStartNull() {
-        assertNull(start.previousState());
+    public void testHandle_Controller_Exit() {
+        c.handle("e");
+        assertEquals(mister.controller, prev);
     }
 
     @Test
-    public void assertScenNotNull() {
-        assertNotNull(scen1.previousState());
+    public void testExit_Controller() {
+        c.exit();
+        assertEquals(mister.controller, prev);
     }
 
     @Test
-    public void assertStartNextNotNull() {
-        assertNotNull(start.nextState("scenario1"));
+    public void testHandle_Controller_Back_StartState() {
+        c.handle("b");
+        assertEquals(c.state, new StartStateTest(c));
     }
 
     @Test
-    public void assertStartNextWrongName() {
-        assertNotNull(start.nextState("sceario1"));
+    public void testHandle_Controller_Back_NonStartState() {
+        c.handle("mister"); // Will be passed to state, state will always go to next state in this case
+        c.handle("b"); //
+        assertEquals(c.state, new SecondStateTest(this.c));
     }
 
-    private static class StateTest extends BaseState {
-        private final String test;
-        StateTest(String test) {
-            super("test");
-            this.test = test;
+    @Test
+    public void testGetStateController() {
+        assertEquals(c.getState(), new StartStateTest(c));
+    }
+
+    @Test
+    public void testEqualsSameState() {
+        assertEquals(start, start);
+    }
+
+    @Test
+    public void testEqualsObject() {
+        assertNotEquals(start, "optee");
+    }
+
+    public static class ControllerFlowInstance extends ControllerFlow {
+
+        public ControllerFlowInstance(MisterC c, Controller prev) {
+            super(c, prev);
         }
+
         @Override
-        public ActionResult handle(String input) {
-            if(test.equals("success")) return new ActionResult(Result.SUCCESS);
-            return new ActionResult(Result.SUCCESS);
+        public BaseState setStartState() {
+            return new StartStateTest(this);
         }
-        @Override
-        public void render() {
 
+        @Override
+        public void paint() {
         }
+
+    }
+
+
+    private static class MisterCInstance extends MisterC {
     }
 
 }
