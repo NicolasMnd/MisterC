@@ -44,6 +44,13 @@ public class InputHandlerTest {
     }
 
     @Test
+    public void testNegativeNumber_NoString() {
+        setInputStream("-50");
+        Integer a = InputHandler.getNumberPart(InputHandler.readString());
+        assertEquals(a, -50);
+    }
+
+    @Test
     public void testGetNumbers_NoNumbers() {
         setInputStream("hello");
         assertNull(InputHandler.getNumberPart(InputHandler.readString()));
