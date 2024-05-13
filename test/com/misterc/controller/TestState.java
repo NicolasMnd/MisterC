@@ -38,16 +38,16 @@ public class TestState {
     }
 
     @Test
-    public void testHandle_Controller_Back_StartState() {
+    public void testHandle_Controller_Back_StartState_Null() {
         c.handle("b");
-        assertEquals(c.state, new StartStateTest(c));
+        assertNull(c.state);
     }
 
     @Test
     public void testHandle_Controller_Back_NonStartState() {
         c.handle("mister"); // Will be passed to state, state will always go to next state in this case
         c.handle("b"); //
-        assertEquals(c.state, new SecondStateTest(this.c));
+        assertEquals(c.state, new StartStateTest(this.c));
     }
 
     @Test

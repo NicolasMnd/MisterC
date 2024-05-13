@@ -17,20 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class InputHandlerTest {
 
+    InputHandler handler;
+
     @BeforeEach
     public void init() {
+        handler = new InputHandler();
     }
 
     @Test
     public void testReadStringCorrectly() {
         setInputStream("hello");
-        assertEquals(InputHandler.readString(), "hello");
+        assertEquals(handler.readString(), "hello");
     }
 
     @Test
     public void testSplitStringIntegerNonSplit() {
         setInputStream("hellomister545");
-        String a = InputHandler.readString();
+        String a = handler.readString();
         assertEquals(InputHandler.getStringPart(a), "hellomister");
         assertEquals(InputHandler.getNumberPart(a), 545);
     }
@@ -38,7 +41,7 @@ public class InputHandlerTest {
     @Test
     public void testSplitStringInteger_Split() {
         setInputStream("4hellom5ister9");
-        String a = InputHandler.readString();
+        String a = handler.readString();
         assertEquals(InputHandler.getStringPart(a), "hellomister");
         assertEquals(InputHandler.getNumberPart(a), 459);
     }
@@ -46,14 +49,14 @@ public class InputHandlerTest {
     @Test
     public void testNegativeNumber_NoString() {
         setInputStream("-50");
-        Integer a = InputHandler.getNumberPart(InputHandler.readString());
+        Integer a = InputHandler.getNumberPart(handler.readString());
         assertEquals(a, -50);
     }
 
     @Test
     public void testGetNumbers_NoNumbers() {
         setInputStream("hello");
-        assertNull(InputHandler.getNumberPart(InputHandler.readString()));
+        assertNull(InputHandler.getNumberPart(handler.readString()));
     }
 
     @Test
@@ -77,22 +80,29 @@ public class InputHandlerTest {
     @Test
     public void readIntegerSafely_IntegerONly() {
         setInputStream("1");
-        String s = InputHandler.readString();
+        String s = handler.readString();
         assertEquals(InputHandler.getNumberPartSafely(s, -1), 1);
     }
 
     @Test
     public void readIntegerSafely_IntegerAndString() {
         setInputStream("1sdfsd2");
-        String s = InputHandler.readString();
+        String s = handler.readString();
         assertEquals(InputHandler.getNumberPartSafely(s, -1), 12);
     }
 
     @Test
     public void readIntegerSafely_StringOnly() {
         setInputStream("sdfsd");
-        String s = InputHandler.readString();
+        String s = handler.readString();
         assertEquals(InputHandler.getNumberPartSafely(s, -1), -1);
+    }
+
+    @Test
+    public void setInt() {
+        setInputStream("2", "3");
+        String s = handler.readString();
+        System.out.println("s: " + s);
     }
 
     private void setInputStream(String input) {
@@ -102,5 +112,18 @@ public class InputHandlerTest {
         InputStream story = new SequenceInputStream(Collections.enumeration(streams));
         System.setIn(story);
     }
+
+    protected void setInputStream(String... input) {
+        String beginning = "";
+        for(String i : input)
+            beginning += i + "\n";
+        System.out.println("Beginning: " + beginning);
+        beginning += "-#end\n";
+        List<InputStream> streams = List.of(
+                new ByteArrayInputStream(beginning.getBytes()));
+        InputStream story = new SequenceInputStream(Collections.enumeration(streams));
+        System.setIn(story);
+    }
+
 
 }

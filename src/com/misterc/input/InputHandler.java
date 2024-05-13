@@ -1,8 +1,17 @@
 package com.misterc.input;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class InputHandler {
+
+    public InputHandler() {
+
+    }
 
     /**
      * Will try parsing input to integer. Upon failing, it will return null.
@@ -35,19 +44,37 @@ public class InputHandler {
      * @return string
      */
     public static String readString() {
-        Scanner scanner = new Scanner(System.in);
-        Object input;
-
-        while (true) {
+        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+        BufferedReader reader = new BufferedReader(inputStreamReader);
+        while(true) {
             try {
-                input = scanner.nextLine();
+                StringBuilder inputBuilder = new StringBuilder();
+                String line;
 
-                if (input != null) {
-                    return (new Wrapper(String.valueOf(input))).getStrValue();
+                // Loop until input is received
+                while (true) {
+                    // Check if input is available
+                    if (System.in.available() > 0) {
+                        // Read all lines from the input stream
+                        while ((line = reader.readLine()) != null) {
+                            inputBuilder.append(line).append(System.lineSeparator());
+                            break;
+                        }
+                        break; // Exit the loop when input is read
+                    }
+                    // Sleep briefly to avoid CPU-intensive spinning
+                    Thread.sleep(100);
                 }
 
-            } catch (Exception e) {
-                System.out.println("Invalid input.");
+                String input = inputBuilder.toString().trim(); // Remove leading/trailing whitespaces
+
+                // Process each line separately
+                String[] lines = input.split(System.lineSeparator());
+                if (lines.length > 0 && !lines[0].isEmpty())
+                    return lines[0];
+
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }

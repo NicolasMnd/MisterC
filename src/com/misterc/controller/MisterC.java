@@ -7,10 +7,13 @@ public abstract class MisterC {
     /**
      * The controller used to control the program flow.
      */
-    protected Controller controller;
+    public Controller controller;
     private boolean run = true;
+    private InputHandler handler;
 
-    public MisterC() {}
+    public MisterC() {
+        this.handler = new InputHandler();
+    }
 
     /**
      * Sets a new controller to the program flow
@@ -33,10 +36,10 @@ public abstract class MisterC {
     public final void loop() {
         while(run) {
             controller.paint();
-            String input = InputHandler.readString();
-            controller.handle(input);
+            String input = handler.readString();
+            if(input.equals("-#end")) this.stop();
+            else controller.handle(input);
         }
     }
-    
 
 }
