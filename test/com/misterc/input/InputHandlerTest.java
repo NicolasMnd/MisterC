@@ -117,7 +117,6 @@ public class InputHandlerTest {
         String beginning = "";
         for(String i : input)
             beginning += i + "\n";
-        System.out.println("Beginning: " + beginning);
         beginning += "-#end\n";
         List<InputStream> streams = List.of(
                 new ByteArrayInputStream(beginning.getBytes()));

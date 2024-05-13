@@ -57,10 +57,12 @@ public class InputHandler {
                     if (System.in.available() > 0) {
                         // Read all lines from the input stream
                         while ((line = reader.readLine()) != null) {
-                            inputBuilder.append(line).append(System.lineSeparator());
-                            break;
+                            inputBuilder.append(line).append(System.lineSeparator()); // At this point we read something
+                            if(!reader.ready()) {
+                                break; // if the input stream is empty now, we break, else we read until empty
+                            }
                         }
-                        break; // Exit the loop when input is read
+                        break;
                     }
                     // Sleep briefly to avoid CPU-intensive spinning
                     Thread.sleep(100);
@@ -70,8 +72,19 @@ public class InputHandler {
 
                 // Process each line separately
                 String[] lines = input.split(System.lineSeparator());
-                if (lines.length > 0 && !lines[0].isEmpty())
+                List<String> rest = new ArrayList<>();
+                for(int i = 1; i < lines.length; i++)
+                    rest.add(lines[i]);
+
+                // And put back
+
+                String remainingInput = rest.stream().collect(Collectors.joining(System.lineSeparator()));
+                ByteArrayInputStream remainingInputStream = new ByteArrayInputStream(remainingInput.getBytes());
+                System.setIn(remainingInputStream);
+
+                if (lines.length > 0 && !lines[0].isEmpty()) {
                     return lines[0];
+                }
 
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
