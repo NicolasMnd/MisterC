@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 public class InputHandler {
 
-    public InputHandler() {
+    private final InputStream systemInput;
 
+    public InputHandler() {
+        this.systemInput = System.in;
     }
 
     /**
@@ -43,54 +45,47 @@ public class InputHandler {
      * Will return the given input in String format.
      * @return string
      */
-    public static String readString() {
-        InputStreamReader inputStreamReader = new InputStreamReader(System.in);
-        BufferedReader reader = new BufferedReader(inputStreamReader);
-        while(true) {
-            try {
-                StringBuilder inputBuilder = new StringBuilder();
-                String line;
+    public String readString() {
 
-                // Loop until input is received
-                while (true) {
-                    // Check if input is available
-                    if (System.in.available() > 0) {
-                        // Read all lines from the input stream
-                        while ((line = reader.readLine()) != null) {
-                            inputBuilder.append(line).append(System.lineSeparator()); // At this point we read something
-                            if(!reader.ready()) {
-                                break; // if the input stream is empty now, we break, else we read until empty
-                            }
-                        }
-                        break;
+        try {
+            StringBuilder builder = new StringBuilder();
+
+            while (true) {
+                if (System.in.available() > 0) {
+                    InputStreamReader inputReader = new InputStreamReader(System.in);
+                    BufferedReader reader = new BufferedReader(inputReader);
+
+                    while (reader.ready()) {
+                        builder.append(reader.readLine()).append(System.lineSeparator());
                     }
-                    // Sleep briefly to avoid CPU-intensive spinning
-                    Thread.sleep(100);
-                }
+                    break;
+                } else
+                    System.setIn(systemInput);
+                Thread.sleep(100);
+            }
 
-                String input = inputBuilder.toString().trim(); // Remove leading/trailing whitespaces
+            String[] input = builder.toString().trim().split(System.lineSeparator());
 
-                // Process each line separately
-                String[] lines = input.split(System.lineSeparator());
-                List<String> rest = new ArrayList<>();
-                for(int i = 1; i < lines.length; i++)
-                    rest.add(lines[i]);
+            List<String> rest = new ArrayList<>();
+            for (int i = 1; i < input.length; i++)
+                rest.add(input[i]);
 
-                // And put back
-
+            if (!(rest.isEmpty())) {
                 String remainingInput = rest.stream().collect(Collectors.joining(System.lineSeparator()));
                 ByteArrayInputStream remainingInputStream = new ByteArrayInputStream(remainingInput.getBytes());
                 System.setIn(remainingInputStream);
-
-                if (lines.length > 0 && !lines[0].isEmpty()) {
-                    return lines[0];
-                }
-
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
             }
+
+            return input[0];
+
+        } catch(Exception e) {
+            System.out.println("[InputHandler#readString]: getting input failed");
         }
+
+        return null;
+
     }
+
 
     /**
      * Will strip the given input of any numbers.
