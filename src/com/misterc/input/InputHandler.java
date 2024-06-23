@@ -50,19 +50,20 @@ public class InputHandler {
         try {
             StringBuilder builder = new StringBuilder();
 
-            while (true) {
-                if (System.in.available() > 0) {
-                    InputStreamReader inputReader = new InputStreamReader(System.in);
-                    BufferedReader reader = new BufferedReader(inputReader);
+            if (System.in.available() > 0) {
+                InputStreamReader inputReader = new InputStreamReader(System.in);
+                BufferedReader reader = new BufferedReader(inputReader);
 
-                    while (reader.ready()) {
-                        builder.append(reader.readLine()).append(System.lineSeparator());
-                    }
-                    break;
-                } else
+                while (reader.ready()) {
+                    builder.append(reader.readLine()).append(System.lineSeparator());
+                }
+            } else {
+                if(System.in != systemInput)
                     System.setIn(systemInput);
-                Thread.sleep(100);
+                Scanner s = new Scanner(System.in);
+                builder.append(s.nextLine());
             }
+
 
             String[] input = builder.toString().trim().split(System.lineSeparator());
 
