@@ -1,11 +1,15 @@
 package com.misterc.controller;
 
+import com.misterc.input.InputType;
+import com.misterc.input.ScannerInput;
+
 class Main extends MisterC {
 
     public static int WIDTH = 100;
     public static int HEIGHT = 60;
 
     public Main() {
+        super(new ScannerInput());
         this.setController(new Cd(this));
     }
 
@@ -20,7 +24,7 @@ class Main extends MisterC {
         }
 
         @Override
-        public void handle(String input) {
+        public void handle(InputType input) {
 
         }
 

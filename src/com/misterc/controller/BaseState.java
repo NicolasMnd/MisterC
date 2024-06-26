@@ -1,9 +1,6 @@
 package com.misterc.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.misterc.input.InputType;
 
 /**
  * Generic state object
@@ -40,6 +37,14 @@ public abstract class BaseState implements State {
      * Returns the state that is previous of this one.
      */
     public abstract BaseState back();
+
+    public boolean equalsBack(InputType type) {
+        return type.getData().equals("b");
+    }
+
+    public boolean equalsExit(InputType type) {
+        return type.getData().equals("e");
+    }
 
     /**
      * Returns the name of the state

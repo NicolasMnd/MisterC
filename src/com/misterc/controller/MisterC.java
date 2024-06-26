@@ -1,6 +1,8 @@
 package com.misterc.controller;
 
 import com.misterc.input.InputHandler;
+import com.misterc.input.InputType;
+import com.misterc.input.ScannerInput;
 
 public abstract class MisterC {
 
@@ -11,8 +13,8 @@ public abstract class MisterC {
     private boolean run = true;
     private InputHandler handler;
 
-    public MisterC() {
-        this.handler = new InputHandler();
+    public MisterC(InputHandler handler) {
+        this.handler = handler;
     }
 
     /**
@@ -36,8 +38,8 @@ public abstract class MisterC {
     public final void loop() {
         while(run) {
             controller.paint();
-            String input = handler.readString();
-            if(input.equals("-#end")) this.stop();
+            InputType input = handler.getInput();
+            if(handler.stop(input)) this.stop();
             else controller.handle(input);
         }
     }

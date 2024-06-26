@@ -1,5 +1,7 @@
 package com.misterc.controller;
 
+import com.misterc.input.InputType;
+
 /**
  * Controller flow is used to make a sequenced interaction with the user. It takes in {@link BaseState} objects
  * and can go through them depending on their settings.
@@ -26,8 +28,8 @@ public abstract class ControllerFlow extends Controller {
     public abstract BaseState setStartState();
 
     @Override
-    public void handle(String input) {
-        if(input.equals("e")) exit();
+    public void handle(InputType input) {
+        if(state.equalsExit(input)) exit();
         if(back(input)) return;
         this.result = this.state.handle(input);
     }
@@ -52,8 +54,8 @@ public abstract class ControllerFlow extends Controller {
      * @param input the input of the main loop
      * @return a boolean determining if the input was indeed 'b'
      */
-    protected boolean back(String input) {
-        if(input.equalsIgnoreCase("b")) {
+    protected boolean back(InputType input) {
+        if(state.equalsBack(input)) {
             if(state.back() == null) this.currentProgram.setController(previousController);
             this.state = this.state.back();
             return true;

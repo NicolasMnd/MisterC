@@ -3,6 +3,7 @@ package com.misterc.controller.states;
 import com.misterc.controller.ActionResult;
 import com.misterc.controller.BaseState;
 import com.misterc.controller.ControllerFlow;
+import com.misterc.input.InputType;
 
 public class ThirdStateTest extends BaseState {
 
@@ -17,7 +18,7 @@ public class ThirdStateTest extends BaseState {
     }
 
     @Override
-    public ActionResult handle(String input) {
+    public ActionResult handle(InputType input) {
         this.nextState(new StartStateTest(this.controller));
         return null;
     }

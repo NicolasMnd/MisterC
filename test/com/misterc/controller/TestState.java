@@ -2,6 +2,8 @@ package com.misterc.controller;
 
 import com.misterc.controller.states.SecondStateTest;
 import com.misterc.controller.states.StartStateTest;
+import com.misterc.input.InputType;
+import com.misterc.input.ScannerInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +29,7 @@ public class TestState {
 
     @Test
     public void testHandle_Controller_Exit() {
-        c.handle("e");
+        c.handle(new InputType("e"));
         assertEquals(mister.controller, prev);
     }
 
@@ -39,14 +41,14 @@ public class TestState {
 
     @Test
     public void testHandle_Controller_Back_StartState_Null() {
-        c.handle("b");
+        c.handle(new InputType("b"));
         assertNull(c.state);
     }
 
     @Test
     public void testHandle_Controller_Back_NonStartState() {
-        c.handle("mister"); // Will be passed to state, state will always go to next state in this case
-        c.handle("b"); //
+        c.handle(new InputType("mister")); // Will be passed to state, state will always go to next state in this case
+        c.handle(new InputType("b")); //
         assertEquals(c.state, new StartStateTest(this.c));
     }
 
@@ -84,6 +86,9 @@ public class TestState {
 
 
     private static class MisterCInstance extends MisterC {
+        public MisterCInstance() {
+            super(new ScannerInput());
+        }
     }
 
 }

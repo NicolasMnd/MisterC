@@ -1,6 +1,6 @@
-package com.misterc.controller;
+package com.misterc.input;
 
-public abstract class InputType<T> {
+public class InputType<T> {
 
     private final T data;
 
