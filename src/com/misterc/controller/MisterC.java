@@ -9,7 +9,7 @@ public abstract class MisterC {
     /**
      * The controller used to control the program flow.
      */
-    public Controller controller;
+    Controller controller;
     private boolean run = true;
     private InputHandler handler;
 

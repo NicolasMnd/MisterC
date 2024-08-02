@@ -59,19 +59,19 @@ public class InputHandlerTest {
     @Test
     public void readInteger_NoInteger() {
         setInputStream("mister");
-        assertNull(handler.readInteger());
+        assertNull(InputHelper.readInteger());
     }
 
     @Test
     public void readInteger_Integer() {
         setInputStream("5");
-        assertEquals(handler.readInteger().getData(), 5);
+        assertEquals(InputHelper.readInteger(), 5);
     }
 
     @Test
     public void readInteger_IntegerAndString() {
         setInputStream("mister5");
-        assertNull(handler.readInteger());
+        assertNull(InputHelper.readInteger());
     }
 
     @Test
