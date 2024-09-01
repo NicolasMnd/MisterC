@@ -1,6 +1,7 @@
 # MisterC
-MisterC is based upon the controller principle of GRASP. It creates a MisterC object and will block while asking for input. The object is instantiated
-with a ``InputHandler``. This ``InputHandler`` interface provides ``InputType getInput()`` and ``boolean stop(InputType)``. 
+MisterC is based upon the controller principle of GRASP. MisterC objects can be instantiated and started using ``void loop()``. The object will block
+and wait until input can be read from the input stream. The object is to be instantiated with a ``InputHandler``. This ``InputHandler`` interface provides 
+``InputType getInput()`` and ``boolean stop(InputType)``. 
 
 For example, a ``Scanner`` implementation would return a ``InputType<String>`` by reading in ``System.in``. The ``stop(InputType)`` describes
 a way for testing environments to stop asking for input & end the test. Subclasses of ``InputHandler`` will return a specific generic value.
